@@ -2,7 +2,7 @@
     <div class="container">
         <h1 class="title">
 
-            hello, how you doin?
+            Okay, how is everyone at home?
         </h1>
     </div>
 </template>
