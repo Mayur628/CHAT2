@@ -51,7 +51,7 @@ message.value = '';
 
 function handleLogOut(){
     localStorage.clear();
-    navigateTo('/login')
+    navigateTo('/')
 }
 </script>
 
