@@ -13,8 +13,6 @@
                 <input type="submit"  value="Submit">
             </form>
         </div>
-        {{ input.username }}
-        {{ input.password }}
         
     </div>
 </template>
