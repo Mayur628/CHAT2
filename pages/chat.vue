@@ -4,9 +4,10 @@
             <div class="header d-flex justify-content-between  align-items-center mb-4">
                 <div>user:{{ user }}</div>
                 <div :class="[user.toLocaleLowerCase().includes('mayur')?'color-primary':'color-secondary']"></div>
+                <button @click.prevent="deleteAllChat" class="btn btn-danger">Clear Chat</button>
                 <button @click.prevent="handleLogOut" class="btn btn-danger">Logout</button>
             </div>
-            <div class="messageList">
+            <div class="messageList" ref="allMessages">
                     <div v-for="(message,index) in allChats" :class="['messages mb-2 d-flex justify-content-between' ,message.author.includes('mayur')?'list-one':'list-two']" :key="index"><span class="px-2">{{ message.message }}</span> <span class="font-weight-light font-italic">-{{ message.author }}</span> </div>
             </div>
     
@@ -22,12 +23,18 @@
 </template>
 
 <script setup>
-let allChats=ref([]),message=ref(""),user=ref('');
+import HookNotifier from 'hook.notifier';
+const hn = new HookNotifier({ 
+    identifier: 1693227185209,
+    key: 'empty-wind',
+  });
+let allChats=ref([]),message=ref(""),user=ref(''),allMessages=ref(null);
 const supabase = useSupabaseClient(),refreshMessages=setInterval(getChats,1000);
 
 async function getChats(){
     let {data} = await supabase.from('chats').select('*');
-    allChats.value = data
+    allChats.value = data;
+    scrollToBottom();
 }
 onMounted(()=>{
     user.value = localStorage.getItem('user')
@@ -46,10 +53,24 @@ onUnmounted(()=>{
 async function handleEnter(){
     if(message.value.length){
         const { data } = await supabase.from('chats').insert({ message: message.value, author: user.value, }).single();
-
         message.value = '';
-           await getChats();
+        hn.sendNotification({
+      object: `You've clicked on the button`,
+      body: 'Congratulation',
+      tags: 'test,vuejs',
+    });
+    console.log('comming after push noti')
     }
+}
+
+async function deleteAllChat(){
+const {data} = await    supabase.from('chats').delete().neq('id',0)
+
+}
+
+function scrollToBottom(){
+    if(allMessages.value)
+    allMessages.value.scrollTop = allMessages.value.scrollHeight
 }
 
 function handleLogOut(){
