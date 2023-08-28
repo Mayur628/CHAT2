@@ -23,11 +23,6 @@
 </template>
 
 <script setup>
-import HookNotifier from 'hook.notifier';
-const hn = new HookNotifier({ 
-    identifier: 1693227185209,
-    key: 'empty-wind',
-  });
 let allChats=ref([]),message=ref(""),user=ref(''),allMessages=ref(null);
 const supabase = useSupabaseClient(),refreshMessages=setInterval(getChats,1000);
 
@@ -53,13 +48,14 @@ onUnmounted(()=>{
 async function handleEnter(){
     if(message.value.length){
         const { data } = await supabase.from('chats').insert({ message: message.value, author: user.value, }).single();
+        
+        Notification.requestPermission().then(perm=>{
+            if(perm=='granted'){
+                new Notification('test notification')
+            }
+        })
+        console.log('comming after push noti')
         message.value = '';
-        hn.sendNotification({
-      object: `You've clicked on the button`,
-      body: 'Congratulation',
-      tags: 'test,vuejs',
-    });
-    console.log('comming after push noti')
     }
 }
 
