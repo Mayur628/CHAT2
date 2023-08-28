@@ -23,7 +23,7 @@ let input = ref({
     password:""
 })
 function Login(){
-    if((input.value.username == 'saloni' || input.value.username == 'mayur') && input.value.password == 'somePassword' ){
+    if((input.value.username.toLocaleLowerCase().includes('saloni') || input.value.username.toLocaleLowerCase().includes('mayur')) && input.value.password == 'somePassword' ){
         localStorage.setItem('valid',true);
         localStorage.setItem('user',input.value.username);
 

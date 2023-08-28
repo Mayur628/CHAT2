@@ -1,17 +1,23 @@
 <template>
     <div class="container">
-        <p>user:{{ user }}</p>
-<button @click.prevent="handleLogOut">Logout</button>
-        <div class="messageList">
-                <p v-for="(message,index) in allChats" :class="['messages',message.author.includes('mayur')?'list-one':'list-two']" :key="index">{{ message.message }} </p>
-        </div>
+        <div class="content">
+            <div class="header d-flex justify-content-between  align-items-center mb-4">
+                <div>user:{{ user }}</div>
+                <div :class="[user.toLocaleLowerCase().includes('mayur')?'color-primary':'color-secondary']"></div>
+                <button @click.prevent="handleLogOut" class="btn btn-danger">Logout</button>
+            </div>
+            <div class="messageList">
+                    <div v-for="(message,index) in allChats" :class="['messages mb-2 d-flex justify-content-between' ,message.author.includes('mayur')?'list-one':'list-two']" :key="index"><span>{{ message.message }}</span> <span class="font-weight-light font-italic">-{{ message.author }}</span> </div>
+            </div>
+    
+            <div class="messageForm">
+            <form @submit.prevent="handleEnter" class="form">
+            <input type="text" placeholder="Message" class="form-control" v-model="message">
+            <input type="submit" class="btn btn-success" value="Submit">
+            </form>
+          </div>
 
-        <div class="messageForm">
-        <form @submit.prevent="handleEnter">
-        <input type="text" placeholder="Message" v-model="message">
-        <input type="submit" value="Submit">
-        </form>
-      </div>
+        </div>
     </div>
 </template>
 
@@ -60,6 +66,15 @@ function handleLogOut(){
     justify-content: center;
     align-items: center;
     height: 100vh;
+}
+.color-primary{
+    height: 10px;
+    width: 10px;
+    background-color: rgb(242, 217, 243);
+}
+.color-secondary{
+
+    background-color: peachpuff;
 }
 .list-one{
     background-color: rgb(242, 217, 243);
