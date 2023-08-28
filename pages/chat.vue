@@ -7,12 +7,12 @@
                 <button @click.prevent="handleLogOut" class="btn btn-danger">Logout</button>
             </div>
             <div class="messageList">
-                    <div v-for="(message,index) in allChats" :class="['messages mb-2 d-flex justify-content-between' ,message.author.includes('mayur')?'list-one':'list-two']" :key="index"><span>{{ message.message }}</span> <span class="font-weight-light font-italic">-{{ message.author }}</span> </div>
+                    <div v-for="(message,index) in allChats" :class="['messages mb-2 d-flex justify-content-between' ,message.author.includes('mayur')?'list-one':'list-two']" :key="index"><span class="px-2">{{ message.message }}</span> <span class="font-weight-light font-italic">-{{ message.author }}</span> </div>
             </div>
     
-            <div class="messageForm">
-            <form @submit.prevent="handleEnter" class="form">
-            <input type="text" placeholder="Message" class="form-control" v-model="message">
+            <div class="messageForm my-3">
+            <form @submit.prevent="handleEnter" class="form d-flex justify-content-between">
+            <input type="text" placeholder="Message" class="form-control mx-2 " v-model="message">
             <input type="submit" class="btn btn-success" value="Submit">
             </form>
           </div>
@@ -44,9 +44,12 @@ onUnmounted(()=>{
 
 
 async function handleEnter(){
-const { data } = await supabase.from('chats').insert({ message: message.value, author: user.value, }).single();
-message.value = '';
-   await getChats();
+    if(message.value.length){
+        const { data } = await supabase.from('chats').insert({ message: message.value, author: user.value, }).single();
+
+        message.value = '';
+           await getChats();
+    }
 }
 
 function handleLogOut(){
@@ -82,6 +85,11 @@ function handleLogOut(){
 .list-two{
     background-color: peachpuff;
     
+}
+.messageList{
+    max-height: 70vh;
+    overflow: scroll;
+    overflow-x:hidden ;
 }
 
 </style>
